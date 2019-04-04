@@ -9,7 +9,7 @@ namespace Toolbox
         public bool autoOffset = true;
         public Vector3 offset;
 
-        const float expectedFPS = 60f;
+        const float ExpectedFPS = 60f;
 
         public virtual void Start()
         {
@@ -35,7 +35,7 @@ namespace Toolbox
             if (target != null)
             {
                 Vector3 desiredPos = target.position + offset;
-                pos += (desiredPos - pos) * followPercent * (Time.deltaTime * expectedFPS);
+                pos += (desiredPos - pos) * followPercent * (Time.deltaTime * ExpectedFPS);
             }
 
             return pos;

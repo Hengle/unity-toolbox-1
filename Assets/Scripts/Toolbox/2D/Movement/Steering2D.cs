@@ -10,7 +10,7 @@ namespace Toolbox
         /// <summary>
         /// A steering with no force that is not considered moving so the rigidbody receives stopping drag.
         /// </summary>
-        public static readonly Steering2D STOP = new Steering2D
+        public static readonly Steering2D Stop = new Steering2D
         {
             force = Vector2.zero,
             isMoving = false
@@ -19,7 +19,7 @@ namespace Toolbox
         /// <summary>
         /// A steering with no force, but is still considered moving so the rigidbody receives moving drag.
         /// </summary>
-        public static readonly Steering2D NONE = new Steering2D
+        public static readonly Steering2D None = new Steering2D
         {
             force = Vector2.zero,
             isMoving = true

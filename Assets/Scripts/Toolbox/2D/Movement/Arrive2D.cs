@@ -33,7 +33,7 @@ namespace Toolbox
             /* If we are within the stopping radius then stop. */
             if (dist < targetRadius)
             {
-                return Steering2D.STOP;
+                return Steering2D.Stop;
             }
 
             /* Calculate the target speed, full speed at slowRadius distance and 0 speed at 0 distance */

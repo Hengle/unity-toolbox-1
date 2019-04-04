@@ -20,7 +20,7 @@ namespace Toolbox
         /// it applied for all future FixedUpdates if you set it once.
         /// </remarks>
         [System.NonSerialized]
-        public Steering2D steering = Steering2D.STOP;
+        public Steering2D steering = Steering2D.Stop;
 
         Rigidbody2D rb;
         List<ForceTime> knockbacks = new List<ForceTime>();

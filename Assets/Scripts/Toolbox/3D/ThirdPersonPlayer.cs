@@ -14,7 +14,7 @@ namespace Toolbox
 
         public bool autoAttachToCamera = true;
 
-        const float OFFSET = 0.01f;
+        const float Offset = 0.01f;
 
         Rigidbody rb;
 
@@ -48,11 +48,11 @@ namespace Toolbox
 
             if (Input.GetButtonDown("Jump"))
             {
-                Vector3 origin = transform.position + col.center + (Vector3.up * OFFSET);
+                Vector3 origin = transform.position + col.center + (Vector3.up * Offset);
                 RaycastHit hit;
 
                 if (Physics.SphereCast(origin, col.radius, Vector3.down, out hit)
-                    && (hit.distance - OFFSET) < jumpThreshold)
+                    && (hit.distance - Offset) < jumpThreshold)
                 {
                     Vector3 vel = rb.velocity;
                     vel.y = jumpSpeed;
