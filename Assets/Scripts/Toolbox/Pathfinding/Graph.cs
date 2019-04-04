@@ -18,13 +18,6 @@ namespace Toolbox
     /// </summary>
     public class FourDirectionGraph : IGraph
     {
-        static readonly Vector3Int[] NEIGHBORS = {
-            new Vector3Int(1, 0, 0),
-            new Vector3Int(0, -1, 0),
-            new Vector3Int(-1, 0, 0),
-            new Vector3Int(0, 1, 0)
-        };
-
         Tilemap map;
         BoundsInt bounds;
 
@@ -49,7 +42,7 @@ namespace Toolbox
 
         public IEnumerable<Vector3Int> Neighbors(Vector3Int v)
         {
-            foreach (Vector3Int dir in NEIGHBORS)
+            foreach (Vector3Int dir in Utils.FourDirections)
             {
                 Vector3Int next = v + dir;
 

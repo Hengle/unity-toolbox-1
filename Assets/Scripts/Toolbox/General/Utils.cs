@@ -1,10 +1,30 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Toolbox
 {
     public static class Utils
     {
-        public const float EPSILON = 0.00001f;
+        public const float Epsilon = 0.00001f;
+
+        public static readonly Vector3Int[] FourDirections = {
+            new Vector3Int(1, 0, 0),
+            new Vector3Int(0, -1, 0),
+            new Vector3Int(-1, 0, 0),
+            new Vector3Int(0, 1, 0)
+        };
+
+        public static readonly Vector3Int[] EightDirections = {
+            new Vector3Int(1, 0, 0),
+            new Vector3Int(1, -1, 0),
+            new Vector3Int(0, -1, 0),
+            new Vector3Int(-1, -1, 0),
+            new Vector3Int(-1, 0, 0),
+            new Vector3Int(-1, 1, 0),
+            new Vector3Int(0, 1, 0),
+            new Vector3Int(1, 1, 0)
+        };
 
         public static T GetComponentAtMouse3D<T>()
         {
@@ -38,7 +58,7 @@ namespace Toolbox
 
         public static bool IsZero(float f)
         {
-            return System.Math.Abs(f) < EPSILON;
+            return System.Math.Abs(f) < Epsilon;
         }
 
         public static float Sign(float f)
