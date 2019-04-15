@@ -43,10 +43,15 @@ namespace Toolbox
 
         public static T GetComponentAtMouse2D<T>()
         {
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return GetComponentAtPosition2D<T>(worldPoint);
+        }
+
+        public static T GetComponentAtPosition2D<T>(Vector3 position)
+        {
             T target = default(T);
 
-            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D col = Physics2D.OverlapPoint(worldPoint);
+            Collider2D col = Physics2D.OverlapPoint(position);
 
             if (col != null)
             {

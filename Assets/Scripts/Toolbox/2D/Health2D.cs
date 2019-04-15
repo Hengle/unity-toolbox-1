@@ -5,16 +5,22 @@ namespace Toolbox
 {
     public class Health2D : Health
     {
-        public SpriteRenderer model;
+        public SpriteRenderer[] models;
         public Color hurtTint = Color.red;
         public float hurtFlashDuration = 0.1f;
 
-        Color originalTint;
+        Color[] originalTints;
 
         public override void Start()
         {
             base.Start();
-            originalTint = model.color;
+
+            originalTints = new Color[models.Length];
+
+            for (int i = 0; i < models.Length; i++)
+            {
+                originalTints[i] = models[i].color;
+            }
         }
 
         public override bool ApplyDamage(float damage)
@@ -23,7 +29,11 @@ namespace Toolbox
 
             if (result)
             {
-                model.color = hurtTint;
+                for (int i = 0; i < models.Length; i++)
+                {
+                    models[i].color = hurtTint;
+                }
+
                 StartCoroutine(TurnOffTint());
             }
 
@@ -34,7 +44,10 @@ namespace Toolbox
         {
             yield return new WaitForSeconds(hurtFlashDuration);
 
-            model.color = originalTint;
+            for (int i = 0; i < models.Length; i++)
+            {
+                models[i].color = originalTints[i];
+            }
         }
     }
 }

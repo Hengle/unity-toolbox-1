@@ -2,11 +2,12 @@
 
 namespace Toolbox
 {
-    public class StateManager : Manager<StateManager>
+    public class StateMachine<T> : State where T : State
     {
-        State active;
+        [SerializeField]
+        T active;
 
-        public State Active
+        public virtual T Active
         {
             get
             {
@@ -29,24 +30,22 @@ namespace Toolbox
             }
         }
 
-        void Update()
+        public virtual void Update()
         {
-            if (active != null)
+            if (Active != null)
             {
-                active.StateUpdate();
-            }
-            else if (Input.GetMouseButtonDown(0))
-            {
-                active = Utils.GetComponentAtMouse3D<State>();
+                Active.StateUpdate();
             }
         }
 
-        public void Clear(State s)
+        public virtual void Clear(State s)
         {
-            if (active == s)
+            if (Active == s)
             {
-                active = null;
+                Active = null;
             }
         }
     }
+
+    public class StateMachine : StateMachine<State> { }
 }
