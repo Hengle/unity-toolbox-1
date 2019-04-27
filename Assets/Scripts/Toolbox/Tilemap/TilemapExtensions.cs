@@ -5,6 +5,12 @@ namespace Toolbox
 {
     public static class TilemapExtensions
     {
+        public static TileBase GetTile(this Tilemap tilemap, Vector3 position)
+        {
+            Vector3Int pos = tilemap.WorldToCell(position);
+            return tilemap.GetTile(pos);
+        }
+
         public static bool IsInBounds(this Tilemap tilemap, Vector3Int position)
         {
             return tilemap.cellBounds.Contains(position);
@@ -24,9 +30,24 @@ namespace Toolbox
             return tilemap.IsInBounds(position) && tilemap.GetTile(position) == null;
         }
 
+        /// <summary>
+        /// Checks if the cell is in bounds and is not set with a tile.
+        /// </summary>
+        public static bool IsCellEmpty(this Tilemap tilemap, Vector3 position)
+        {
+            Vector3Int pos = tilemap.WorldToCell(position);
+            return tilemap.IsInBounds(pos) && tilemap.GetTile(pos) == null;
+        }
+
         public static Vector3Int MousePositionToCell(this Tilemap tilemap)
         {
             return tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
+
+        public static T GetComponentAtCell<T>(this Tilemap tilemap, Vector3Int position)
+        {
+            Vector3 worldPos = tilemap.GetCellCenterWorld(position);
+            return Utils.GetComponentAtPosition2D<T>(worldPos);
         }
 
         public static void DebugDraw(this Tilemap tilemap, float size, Color color = default(Color), float duration = 0.0f, bool depthTest = true)

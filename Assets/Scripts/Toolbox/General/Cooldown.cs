@@ -40,7 +40,7 @@ namespace Toolbox
         /// </summary>
         public bool CanUseRaw()
         {
-            return Time.time > (lastUse + duration);
+            return Time.time >= (lastUse + duration);
         }
 
         public void Use()
