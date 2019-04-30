@@ -24,7 +24,7 @@ namespace Toolbox
 
             tile = ScriptableObject.CreateInstance<Tile>();
             curPos = transform.position;
-            SetTile(transform.position);
+            SetTileSafe(transform.position);
         }
 
         public virtual void ClearTile()
@@ -47,6 +47,24 @@ namespace Toolbox
             ClearTile();
 
             tilemap.SetTile(tilemap.WorldToCell(newPos), tile);
+
+            curPos = newPos;
+        }
+
+        /// <summary>
+        /// Sets a cell at the given location in the tilemap to a tile
+        /// representing the game object only if the location is empty.
+        /// Call this method whenever the game object moves to a new
+        /// location on the tilemap.
+        /// </summary>
+        public virtual void SetTileSafe(Vector3 newPos)
+        {
+            ClearTile();
+
+            if (tilemap.GetTile(newPos) == null)
+            {
+                tilemap.SetTile(tilemap.WorldToCell(newPos), tile);
+            }
 
             curPos = newPos;
         }
