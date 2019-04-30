@@ -45,7 +45,6 @@ namespace Toolbox
                 AudioSource.PlayClipAtPoint(hurtClip, Camera.main.transform.position, hurtVolume);
             }
 
-            /* Kill the game obj if it loses all its health. */
             if (currentHealth <= 0)
             {
                 OutOfHealth();

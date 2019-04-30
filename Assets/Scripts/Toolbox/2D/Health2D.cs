@@ -27,7 +27,7 @@ namespace Toolbox
         {
             bool result = base.ApplyDamage(damage);
 
-            if (result)
+            if (damage > 0 && result)
             {
                 for (int i = 0; i < models.Length; i++)
                 {
