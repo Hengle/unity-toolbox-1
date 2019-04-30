@@ -30,11 +30,34 @@ namespace Toolbox
             }
         }
 
+        public virtual void Start()
+        {
+            if (Active != null)
+            {
+                Active.StateStart();
+            }
+        }
+
         public virtual void Update()
         {
             if (Active != null)
             {
                 Active.StateUpdate();
+            }
+        }
+
+        bool isQuitting;
+
+        public virtual void OnApplicationQuit()
+        {
+            isQuitting = true;
+        }
+
+        public virtual void OnDestroy()
+        {
+            if (!isQuitting && Active != null)
+            {
+                Active.StateEnd();
             }
         }
 
