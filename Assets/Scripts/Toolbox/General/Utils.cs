@@ -8,14 +8,16 @@ namespace Toolbox
     {
         public const float Epsilon = 0.00001f;
 
-        public static readonly Vector3Int[] FourDirections = {
+        public static readonly Vector3Int[] FourDirections =
+        {
             new Vector3Int(1, 0, 0),
             new Vector3Int(0, -1, 0),
             new Vector3Int(-1, 0, 0),
             new Vector3Int(0, 1, 0)
         };
 
-        public static readonly Vector3Int[] EightDirections = {
+        public static readonly Vector3Int[] EightDirections =
+        {
             new Vector3Int(1, 0, 0),
             new Vector3Int(1, -1, 0),
             new Vector3Int(0, -1, 0),
@@ -23,6 +25,14 @@ namespace Toolbox
             new Vector3Int(-1, 0, 0),
             new Vector3Int(-1, 1, 0),
             new Vector3Int(0, 1, 0),
+            new Vector3Int(1, 1, 0)
+        };
+
+        public static readonly Vector3Int[] DiagonalDirections =
+        {
+            new Vector3Int(1, -1, 0),
+            new Vector3Int(-1, -1, 0),
+            new Vector3Int(-1, 1, 0),
             new Vector3Int(1, 1, 0)
         };
 
@@ -35,7 +45,7 @@ namespace Toolbox
 
             if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
             {
-                target = hit.transform.GetComponent<T>();
+                target = hit.transform.GetComponentInParent<T>();
             }
 
             return target;
@@ -55,7 +65,7 @@ namespace Toolbox
 
             if (col != null)
             {
-                target = col.GetComponent<T>();
+                target = col.GetComponentInParent<T>();
             }
 
             return target;
