@@ -119,6 +119,16 @@ namespace Toolbox
         }
 
         /// <summary>
+        /// Casts a 2D ray with queriesStartInColliders set to false for just
+        /// the raycast without affecting the project setting.
+        /// </summary>
+        public static RaycastHit2D Raycast2D(Vector2 start, Vector2 end, int layerMask)
+        {
+            Vector2 dir = end - start;
+            return Raycast2D(start, dir, dir.magnitude, layerMask);
+        }
+
+        /// <summary>
         /// Casts a circle with queriesStartInColliders set to false for just
         /// the circle cast without affecting the project setting.
         /// </summary>
@@ -132,6 +142,16 @@ namespace Toolbox
             Physics2D.queriesStartInColliders = origQueriesStartInColliders;
 
             return hit;
+        }
+
+        /// <summary>
+        /// Casts a circle with queriesStartInColliders set to false for just
+        /// the circle cast without affecting the project setting.
+        /// </summary>
+        public static RaycastHit2D CircleCast(Vector2 start, Vector2 end, float radius, int layerMask)
+        {
+            Vector2 dir = end - start;
+            return CircleCast(start, radius, dir, dir.magnitude,layerMask);
         }
 
         public static void DebugDrawCross(Vector3 position, float size, Color color = default(Color), float duration = 0.0f, bool depthTest = true)

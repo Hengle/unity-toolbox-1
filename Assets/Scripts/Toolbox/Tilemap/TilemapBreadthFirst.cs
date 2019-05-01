@@ -115,6 +115,21 @@ namespace Toolbox
             return result;
         }
 
+        public static Vector3? ClosestEmptyCell(this Tilemap tilemap, Vector3 position, Vector3Int[] directions)
+        {
+            return tilemap.BreadthFirstSearch(
+                position,
+                directions,
+                tilemap.IsCellEmpty,
+                (current, next) => true
+            );
+        }
+
+        public static Vector3? ClosestEmptyCell(this Tilemap tilemap, Vector3 position)
+        {
+            return tilemap.ClosestEmptyCell(position, Utils.FourDirections);
+        }
+
         /// <summary>
         /// A Breadth First Traversal of nodes in a grid.
         /// </summary>
