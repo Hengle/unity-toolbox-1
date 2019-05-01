@@ -103,6 +103,54 @@ namespace Toolbox
         }
 
         /// <summary>
+        /// Casts a 3D ray with queriesHitBackfaces set to false for just
+        /// the raycast without affecting the project setting.
+        /// </summary>
+        public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float distance, int layerMask)
+        {
+            bool origQueriesHitBackfaces = Physics.queriesHitBackfaces;
+            Physics.queriesHitBackfaces = false;
+
+            bool result = Physics.Raycast(origin, direction, out hitInfo, distance, layerMask);
+
+            Physics.queriesHitBackfaces = origQueriesHitBackfaces;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Casts a 3D ray with queriesHitBackfaces set to false for just
+        /// the raycast without affecting the project setting.
+        /// </summary>
+        public static bool Raycast(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask)
+        {
+            Vector3 dir = end - start;
+            return Raycast(start, dir, out hitInfo, dir.magnitude, layerMask);
+        }
+
+        /// <summary>
+        /// Casts a sphere with queriesHitBackfaces set to false for just
+        /// the sphere cast without affecting the project setting.
+        /// </summary>
+        public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float distance, int layerMask)
+        {
+            bool origQueriesHitBackfaces = Physics.queriesHitBackfaces;
+            Physics.queriesHitBackfaces = false;
+
+            bool result = Physics.SphereCast(origin, radius, direction, out hitInfo, distance, layerMask);
+
+            Physics.queriesHitBackfaces = origQueriesHitBackfaces;
+
+            return result;
+        }
+
+        public static bool SphereCast(Vector3 start, Vector3 end, float radius, out RaycastHit hitInfo, int layerMask)
+        {
+            Vector3 dir = end - start;
+            return SphereCast(start, radius, dir, out hitInfo, dir.magnitude, layerMask);
+        }
+
+        /// <summary>
         /// Casts a 2D ray with queriesStartInColliders set to false for just
         /// the raycast without affecting the project setting.
         /// </summary>
@@ -151,7 +199,7 @@ namespace Toolbox
         public static RaycastHit2D CircleCast(Vector2 start, Vector2 end, float radius, int layerMask)
         {
             Vector2 dir = end - start;
-            return CircleCast(start, radius, dir, dir.magnitude,layerMask);
+            return CircleCast(start, radius, dir, dir.magnitude, layerMask);
         }
 
         public static void DebugDrawCross(Vector3 position, float size, Color color = default(Color), float duration = 0.0f, bool depthTest = true)
