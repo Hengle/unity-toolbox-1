@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Toolbox
@@ -13,9 +14,9 @@ namespace Toolbox
         public int cellWidth = 2;
         public int cellHeight = 2;
 
-        public override void ClearTile()
+        public virtual void ForEachCell(Vector3 position, Action<Vector3Int> action)
         {
-            Vector3Int minCell = tilemap.WorldToCell(curPos);
+            Vector3Int minCell = tilemap.WorldToCell(position);
             minCell.x -= Mathf.FloorToInt(cellWidth / 2f);
             minCell.y -= Mathf.FloorToInt(cellHeight / 2f);
 
@@ -24,13 +25,25 @@ namespace Toolbox
                 for (int j = 0; j < cellHeight; j++)
                 {
                     Vector3Int curCell = new Vector3Int(minCell.x + i, minCell.y + j, minCell.z);
-
-                    if (tilemap.GetTile(curCell) == tile)
-                    {
-                        tilemap.SetTile(curCell, null);
-                    }
+                    action(curCell);
                 }
             }
+        }
+
+        public virtual void ForEachCell(Action<Vector3Int> action)
+        {
+            ForEachCell(curPos, action);
+        }
+
+        public override void ClearTile()
+        {
+            ForEachCell(cell =>
+            {
+                if (tilemap.GetTile(cell) == tile)
+                {
+                    tilemap.SetTile(cell, null);
+                }
+            });
         }
 
         /// <summary>
@@ -47,17 +60,36 @@ namespace Toolbox
         {
             ClearTile();
 
-            Vector3Int minCell = tilemap.WorldToCell(newPos);
-            minCell.x -= Mathf.FloorToInt(cellWidth / 2f);
-            minCell.y -= Mathf.FloorToInt(cellHeight / 2f);
-
-            for (int i = 0; i < cellWidth; i++)
+            ForEachCell(newPos, cell =>
             {
-                for (int j = 0; j < cellHeight; j++)
+                tilemap.SetTile(cell, tile);
+            });
+
+            curPos = newPos;
+        }
+
+        /// <summary>
+        /// Sets multiple cells around the given location in the tilemap to a
+        /// tile representing the game object if the cells are empty. Call
+        /// this method whenever the game object moves to a new location on
+        /// the tilemap.
+        /// </summary>
+        /// <remarks>
+        /// Be very deliberate with the given position. Usually an even length
+        /// should have a coordinate on the edge of a cell and an odd length
+        /// should have a coordinate at the center of a cell.
+        /// </remarks>
+        public override void SetTileSafe(Vector3 newPos)
+        {
+            ClearTile();
+
+            ForEachCell(newPos, cell =>
+            {
+                if (tilemap.GetTile(cell) == null)
                 {
-                    tilemap.SetTile(new Vector3Int(minCell.x + i, minCell.y + j, minCell.z), tile);
+                    tilemap.SetTile(cell, tile);
                 }
-            }
+            });
 
             curPos = newPos;
         }
