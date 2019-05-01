@@ -36,41 +36,6 @@ namespace Toolbox
             new Vector3Int(1, 1, 0)
         };
 
-        public static T GetComponentAtMouse3D<T>()
-        {
-            T target = default(T);
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
-            {
-                target = hit.transform.GetComponentInParent<T>();
-            }
-
-            return target;
-        }
-
-        public static T GetComponentAtMouse2D<T>()
-        {
-            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            return GetComponentAtPosition2D<T>(worldPoint);
-        }
-
-        public static T GetComponentAtPosition2D<T>(Vector3 position)
-        {
-            T target = default(T);
-
-            Collider2D col = Physics2D.OverlapPoint(position);
-
-            if (col != null)
-            {
-                target = col.GetComponentInParent<T>();
-            }
-
-            return target;
-        }
-
         public static bool IsZero(float f)
         {
             return System.Math.Abs(f) < Epsilon;
@@ -100,6 +65,55 @@ namespace Toolbox
         public static float RandomBinomial()
         {
             return Random.value - Random.value;
+        }
+
+        public static T GetComponentAtMouse3D<T>()
+        {
+            T target = default(T);
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+            {
+                target = hit.transform.GetComponentInParent<T>();
+            }
+
+            return target;
+        }
+
+        public static T GetComponentAtPosition3D<T>(Vector3 position)
+        {
+            T target = default(T);
+
+            Collider[] colliders = Physics.OverlapSphere(position, 0.01f);
+
+            if (colliders.Length > 0)
+            {
+                target = colliders[0].GetComponentInParent<T>();
+            }
+
+            return target;
+        }
+
+        public static T GetComponentAtMouse2D<T>()
+        {
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return GetComponentAtPosition2D<T>(worldPoint);
+        }
+
+        public static T GetComponentAtPosition2D<T>(Vector3 position)
+        {
+            T target = default(T);
+
+            Collider2D col = Physics2D.OverlapPoint(position);
+
+            if (col != null)
+            {
+                target = col.GetComponentInParent<T>();
+            }
+
+            return target;
         }
 
         /// <summary>
