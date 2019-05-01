@@ -5,6 +5,15 @@ namespace Toolbox
 {
     public static class Extensions
     {
+        public static bool Approximately(this Vector3 a, Vector3 b, float epsilon)
+        {
+            return Vector3.Distance(a, b) < epsilon;
+        }
+
+        public static void ClampDirection(this Vector3Int v) {
+            v.Clamp(Vector3Int.one * -1, Vector3Int.one);
+        }
+
         public static Transform InstantiateHere(this Transform transform, Transform prefab)
         {
             return Object.Instantiate(prefab, prefab.position + transform.position, Quaternion.identity);
