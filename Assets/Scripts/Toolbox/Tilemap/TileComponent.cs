@@ -69,6 +69,11 @@ namespace Toolbox
             curPos = newPos;
         }
 
+        public virtual LinePath FindPathClosest(Vector3 start, Vector3 goal)
+        {
+            return AStar.FindPathClosest(tilemap, start, goal, tile);
+        }
+
         void OnApplicationQuit()
         {
             isQuitting = true;

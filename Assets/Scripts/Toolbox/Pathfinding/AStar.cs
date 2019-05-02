@@ -14,6 +14,89 @@ namespace Toolbox
     /// </remarks>
     public static class AStar
     {
+        public static LinePath FindPathClosest(Tilemap map, Vector3 start, Vector3 goal)
+        {
+            return FindPathClosest(map, start, goal, null);
+        }
+
+        public static LinePath FindPathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self)
+        {
+            LinePath lp = null;
+
+            Vector3Int s = map.WorldToCell(start);
+            Vector3Int g = map.WorldToCell(goal);
+
+            if (!map.IsCellEmpty(g))
+            {
+                g = ClosestCell(OpenCells(map, g, self), s, g);
+            }
+
+            List<Vector3Int> path = AStar.FindPath(new MoveGraph(map), s, g, Vector3Int.Distance);
+
+            if (path != null)
+            {
+                List<Vector3> nodes = new List<Vector3>(path.Capacity);
+
+                foreach (Vector3Int v in path)
+                {
+                    nodes.Add(map.GetCellCenterWorld(v));
+                }
+
+                lp = new LinePath(nodes);
+            }
+
+            return lp;
+        }
+
+        //TODO should I just make a custom traversal here instead trying to reuse BreadthFirst?
+        static HashSet<Vector3Int> OpenCells(Tilemap map, Vector3Int pos, Tile self)
+        {
+            Dictionary<Vector3Int, int> counts = new Dictionary<Vector3Int, int>();
+            counts.Add(pos, 0);
+
+            HashSet<Vector3Int> openCells = new HashSet<Vector3Int>();
+
+            float minDist = Mathf.Infinity;
+            int minCount = int.MaxValue;
+
+            map.BreadthFirstTraversal(pos, Utils.FourDirections, (current, next) =>
+            {
+                float dist = Vector3Int.Distance(pos, next);
+                int count = counts[current] + 1;
+                counts[next] = count;
+
+                if ((map.IsCellEmpty(next) || map.GetTile(next) == self) && dist <= minDist)
+                {
+                    minDist = dist;
+                    minCount = count;
+                    openCells.Add(next);
+                }
+
+                return count <= minCount;
+            });
+
+            return openCells;
+        }
+
+        static Vector3Int ClosestCell(HashSet<Vector3Int> openCells, Vector3Int start, Vector3Int goal)
+        {
+            Vector3Int closest = goal;
+            float minDist = Mathf.Infinity;
+
+            foreach (Vector3Int c in openCells)
+            {
+                float dist = Vector3Int.Distance(start, c);
+
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = c;
+                }
+            }
+
+            return closest;
+        }
+
         /// <summary>
         /// Finds a path in the tilemap using world coordinates.
         /// </summary>
@@ -23,7 +106,7 @@ namespace Toolbox
 
             List<Vector3Int> path = FindPath(map, map.WorldToCell(start), map.WorldToCell(goal));
 
-            if(path != null)
+            if (path != null)
             {
                 result = new List<Vector3>(path.Capacity);
 
@@ -89,7 +172,7 @@ namespace Toolbox
 
                 Vector3Int v = goal;
 
-                while(v != start)
+                while (v != start)
                 {
                     path.Add(v);
                     v = cameFrom[v];
