@@ -11,6 +11,12 @@ namespace Toolbox
             return tilemap.GetTile(pos);
         }
 
+        public static void CopyBounds(this Tilemap tilemap, Tilemap other)
+        {
+            tilemap.origin = other.origin;
+            tilemap.size = other.size;
+        }
+
         public static bool IsInBounds(this Tilemap tilemap, Vector3Int position)
         {
             return tilemap.cellBounds.Contains(position);
