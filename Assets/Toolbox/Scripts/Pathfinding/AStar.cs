@@ -14,24 +14,45 @@ namespace Toolbox
     /// </remarks>
     public static class AStar
     {
+        /// <summary>
+        /// Find a path to the goal or the closest open cell to the goal.
+        /// </summary>
         public static LinePath FindPathClosest(Tilemap map, Vector3 start, Vector3 goal)
         {
             return FindPathClosest(map, start, goal, null);
         }
 
+        /// <summary>
+        /// Find a path to the goal or the closest open cell to the goal.
+        /// </summary>
+        public static LinePath FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal)
+        {
+            return FindPathClosest(map, start, goal, null);
+        }
+
+        /// <summary>
+        /// Find a path to the goal or the closest open cell to the goal.
+        /// If the self tile is encountered the cell be considered open.
+        /// </summary>
         public static LinePath FindPathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self)
+        {
+            return FindPathClosest(map, map.WorldToCell(start), map.WorldToCell(goal), self);
+        }
+
+        /// <summary>
+        /// Find a path to the goal or the closest open cell to the goal.
+        /// If the self tile is encountered the cell be considered open.
+        /// </summary>
+        public static LinePath FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal, Tile self)
         {
             LinePath lp = null;
 
-            Vector3Int s = map.WorldToCell(start);
-            Vector3Int g = map.WorldToCell(goal);
-
-            if (!map.IsCellEmpty(g) && map.GetTile(g) != self)
+            if (!map.IsCellEmpty(goal) && map.GetTile(goal) != self)
             {
-                g = ClosestCell(OpenCells(map, g, self), s, g);
+                goal = ClosestCell(OpenCells(map, goal, self), start, goal);
             }
 
-            List<Vector3Int> path = AStar.FindPath(new MoveGraph(map), s, g, Vector3Int.Distance);
+            List<Vector3Int> path = AStar.FindPath(new MoveGraph(map), start, goal, Vector3Int.Distance);
 
             if (path != null)
             {
@@ -48,7 +69,6 @@ namespace Toolbox
             return lp;
         }
 
-        //TODO should I just make a custom traversal here instead trying to reuse BreadthFirst?
         static HashSet<Vector3Int> OpenCells(Tilemap map, Vector3Int pos, Tile self)
         {
             Dictionary<Vector3Int, int> counts = new Dictionary<Vector3Int, int>();
