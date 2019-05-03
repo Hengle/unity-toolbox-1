@@ -26,7 +26,7 @@ namespace Toolbox
             Vector3Int s = map.WorldToCell(start);
             Vector3Int g = map.WorldToCell(goal);
 
-            if (!map.IsCellEmpty(g))
+            if (!map.IsCellEmpty(g) && map.GetTile(g) != self)
             {
                 g = ClosestCell(OpenCells(map, g, self), s, g);
             }
@@ -72,7 +72,7 @@ namespace Toolbox
                     openCells.Add(next);
                 }
 
-                return count <= minCount;
+                return count <= minCount && map.IsInBounds(next);
             });
 
             return openCells;
@@ -174,16 +174,38 @@ namespace Toolbox
 
                 while (v != start)
                 {
+                    RemoveDuplicates(path, v);
                     path.Add(v);
                     v = cameFrom[v];
                 }
 
+                RemoveDuplicates(path, start);
                 path.Add(start);
 
                 path.Reverse();
             }
 
             return path;
+        }
+
+        static void RemoveDuplicates(List<Vector3Int> path, Vector3Int v)
+        {
+            if (path.Count >= 2)
+            {
+                Vector3Int last = path[path.Count - 1];
+                Vector3Int secondLast = path[path.Count - 2];
+
+                Vector3Int dir1 = last - secondLast;
+                dir1.Clamp(Vector3Int.one * -1, Vector3Int.one);
+
+                Vector3Int dir2 = v - last;
+                dir2.Clamp(Vector3Int.one * -1, Vector3Int.one);
+
+                if (dir1 == dir2)
+                {
+                    path.RemoveAt(path.Count - 1);
+                }
+            }
         }
     }
 }
