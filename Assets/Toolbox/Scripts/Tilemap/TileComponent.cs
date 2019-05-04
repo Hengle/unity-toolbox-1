@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Toolbox
@@ -69,7 +70,7 @@ namespace Toolbox
             curPos = newPos;
         }
 
-        public virtual LinePath FindPathClosest(Vector3 start, Vector3 goal)
+        public virtual List<Vector3> FindPathClosest(Vector3 start, Vector3 goal)
         {
             return AStar.FindPathClosest(tilemap, start, goal, tile);
         }

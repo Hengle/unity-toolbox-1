@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Toolbox
@@ -43,6 +44,23 @@ namespace Toolbox
         {
             Vector3Int pos = tilemap.WorldToCell(position);
             return tilemap.IsInBounds(pos) && tilemap.GetTile(pos) == null;
+        }
+
+        public static List<Vector3> GetCellCenterWorld(this Tilemap tilemap, List<Vector3Int> path)
+        {
+            List<Vector3> result = null;
+
+            if (path != null)
+            {
+                result = new List<Vector3>(path.Capacity);
+
+                foreach (Vector3Int v in path)
+                {
+                    result.Add(tilemap.GetCellCenterWorld(v));
+                }
+            }
+
+            return result;
         }
 
         public static Vector3Int MousePositionToCell(this Tilemap tilemap)

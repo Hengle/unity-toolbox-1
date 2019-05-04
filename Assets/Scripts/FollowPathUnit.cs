@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Toolbox;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class FollowPathUnit : MonoBehaviour
 {
@@ -19,7 +20,8 @@ public class FollowPathUnit : MonoBehaviour
 
     void FixedUpdate()
     {
-        LinePath lp = tileComponent.FindPathClosest(transform.position, target.position);
+        List<Vector3> nodes = tileComponent.FindPathClosest(transform.position, target.position);
+        LinePath lp = new LinePath(nodes);
         movement.steering = followPath.GetSteering(lp);
         lp.Draw();
 
