@@ -72,12 +72,12 @@ namespace Toolbox
 
         public virtual LinePath FindLinePathClosest(Vector3 start, Vector3 goal)
         {
-            return AStar.FindLinePathClosest(tilemap, start, goal, tile);
+            return AStar.FindLinePathClosest(tilemap, start, goal);
         }
 
         public virtual List<Vector3> FindPathClosest(Vector3 start, Vector3 goal)
         {
-            return AStar.FindPathClosest(tilemap, start, goal, tile);
+            return AStar.FindPathClosest(tilemap, start, goal);
         }
 
         void OnApplicationQuit()

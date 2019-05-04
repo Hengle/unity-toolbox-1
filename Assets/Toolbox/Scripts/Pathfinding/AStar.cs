@@ -18,9 +18,9 @@ namespace Toolbox
         /// Find a path to the goal or the closest open cell to the goal.
         /// If the self tile is encountered the cell be considered open.
         /// </summary>
-        public static LinePath FindLinePathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self = null)
+        public static LinePath FindLinePathClosest(Tilemap map, Vector3 start, Vector3 goal)
         {
-            List<Vector3> path = FindPathClosest(map, start, goal, self);
+            List<Vector3> path = FindPathClosest(map, start, goal);
             return ToLinePath(path);
         }
 
@@ -40,9 +40,9 @@ namespace Toolbox
         /// Find a path to the goal or the closest open cell to the goal.
         /// If the self tile is encountered the cell be considered open.
         /// </summary>
-        public static List<Vector3> FindPathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self = null)
+        public static List<Vector3> FindPathClosest(Tilemap map, Vector3 start, Vector3 goal)
         {
-            List<Vector3Int> path = FindPathClosest(map, map.WorldToCell(start), map.WorldToCell(goal), self);
+            List<Vector3Int> path = FindPathClosest(map, map.WorldToCell(start), map.WorldToCell(goal));
             return map.GetCellCenterWorld(path);
         }
 
@@ -50,33 +50,33 @@ namespace Toolbox
         /// Find a path to the goal or the closest open cell to the goal.
         /// If the self tile is encountered the cell be considered open.
         /// </summary>
-        public static List<Vector3Int> FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal, Tile self = null)
+        public static List<Vector3Int> FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal)
         {
-            if (!map.IsCellEmpty(goal) && map.GetTile(goal) != self)
+            if (!map.IsCellEmpty(goal) && goal != start)
             {
-                goal = ClosestCell(OpenCells(map, goal, self), start, goal);
+                goal = ClosestCell(OpenCells(map, start, goal), start, goal);
             }
 
             return AStar.FindPath(new MoveGraph(map), start, goal, Vector3Int.Distance);
         }
 
-        static HashSet<Vector3Int> OpenCells(Tilemap map, Vector3Int pos, Tile self)
+        static HashSet<Vector3Int> OpenCells(Tilemap map, Vector3Int start, Vector3Int goal)
         {
             Dictionary<Vector3Int, int> counts = new Dictionary<Vector3Int, int>();
-            counts.Add(pos, 0);
+            counts.Add(goal, 0);
 
             HashSet<Vector3Int> openCells = new HashSet<Vector3Int>();
 
             float minDist = Mathf.Infinity;
             int minCount = int.MaxValue;
 
-            map.BreadthFirstTraversal(pos, Utils.FourDirections, (current, next) =>
+            map.BreadthFirstTraversal(goal, Utils.FourDirections, (current, next) =>
             {
-                float dist = Vector3Int.Distance(pos, next);
+                float dist = Vector3Int.Distance(goal, next);
                 int count = counts[current] + 1;
                 counts[next] = count;
 
-                if ((map.IsCellEmpty(next) || map.GetTile(next) == self) && dist <= minDist)
+                if ((map.IsCellEmpty(next) || next == start) && dist <= minDist)
                 {
                     minDist = dist;
                     minCount = count;
