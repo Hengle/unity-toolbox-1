@@ -131,7 +131,7 @@ namespace Toolbox
         /// </summary>
         public static List<Vector3Int> FindPath(Tilemap map, Vector3Int start, Vector3Int goal)
         {
-            return FindPath(new FourDirectionGraph(map), start, goal, Vector3Int.Distance);
+            return FindPath(new MoveGraph(map), start, goal, Vector3Int.Distance);
         }
 
         /// <summary>
