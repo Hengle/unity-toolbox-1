@@ -16,25 +16,31 @@ namespace Toolbox
     {
         /// <summary>
         /// Find a path to the goal or the closest open cell to the goal.
+        /// If the self tile is encountered the cell be considered open.
         /// </summary>
-        public static List<Vector3> FindPathClosest(Tilemap map, Vector3 start, Vector3 goal)
+        public static LinePath FindLinePathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self = null)
         {
-            return FindPathClosest(map, start, goal, null);
+            List<Vector3> path = FindPathClosest(map, start, goal, self);
+            return ToLinePath(path);
         }
 
-        /// <summary>
-        /// Find a path to the goal or the closest open cell to the goal.
-        /// </summary>
-        public static List<Vector3Int> FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal)
+        static LinePath ToLinePath(List<Vector3> path)
         {
-            return FindPathClosest(map, start, goal, null);
+            LinePath lp = null;
+
+            if (path != null)
+            {
+                lp = new LinePath(path);
+            }
+
+            return lp;
         }
 
         /// <summary>
         /// Find a path to the goal or the closest open cell to the goal.
         /// If the self tile is encountered the cell be considered open.
         /// </summary>
-        public static List<Vector3> FindPathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self)
+        public static List<Vector3> FindPathClosest(Tilemap map, Vector3 start, Vector3 goal, Tile self = null)
         {
             List<Vector3Int> path = FindPathClosest(map, map.WorldToCell(start), map.WorldToCell(goal), self);
             return map.GetCellCenterWorld(path);
@@ -44,7 +50,7 @@ namespace Toolbox
         /// Find a path to the goal or the closest open cell to the goal.
         /// If the self tile is encountered the cell be considered open.
         /// </summary>
-        public static List<Vector3Int> FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal, Tile self)
+        public static List<Vector3Int> FindPathClosest(Tilemap map, Vector3Int start, Vector3Int goal, Tile self = null)
         {
             if (!map.IsCellEmpty(goal) && map.GetTile(goal) != self)
             {
@@ -100,6 +106,15 @@ namespace Toolbox
             }
 
             return closest;
+        }
+
+        /// <summary>
+        /// Finds a path in the tilemap using world coordinates.
+        /// </summary>
+        public static LinePath FindLinePath(Tilemap map, Vector3 start, Vector3 goal)
+        {
+            List<Vector3> path = FindPath(map, start, goal);
+            return ToLinePath(path);
         }
 
         /// <summary>

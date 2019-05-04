@@ -20,8 +20,7 @@ public class FollowPathUnit : MonoBehaviour
 
     void FixedUpdate()
     {
-        List<Vector3> nodes = tileComponent.FindPathClosest(transform.position, target.position);
-        LinePath lp = new LinePath(nodes);
+        LinePath lp = tileComponent.FindLinePathClosest(transform.position, target.position);
         movement.steering = followPath.GetSteering(lp);
         lp.Draw();
 
