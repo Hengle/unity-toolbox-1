@@ -25,6 +25,29 @@ namespace Toolbox
             isMoving = true
         };
 
+        public override bool Equals(object obj)
+        {
+            return obj is Steering2D && this == (Steering2D)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + force.GetHashCode();
+            hash = (hash * 7) + isMoving.GetHashCode();
+            return hash;
+        }
+
+        public static bool operator ==(Steering2D left, Steering2D right)
+        {
+            return left.force == right.force && left.isMoving == right.isMoving;
+        }
+
+        public static bool operator !=(Steering2D left, Steering2D right)
+        {
+            return left.force != right.force || left.isMoving != right.isMoving;
+        }
+
         public static Steering2D operator +(Steering2D left, Steering2D right)
         {
             return new Steering2D

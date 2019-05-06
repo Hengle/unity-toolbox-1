@@ -10,7 +10,8 @@ namespace Toolbox
             return Vector3.Distance(a, b) < epsilon;
         }
 
-        public static void ClampDirection(this Vector3Int v) {
+        public static void ClampDirection(this Vector3Int v)
+        {
             v.Clamp(Vector3Int.one * -1, Vector3Int.one);
         }
 
@@ -142,6 +143,16 @@ namespace Toolbox
         public static BoundsInt Clone(this BoundsInt bounds)
         {
             return new BoundsInt(bounds.position, bounds.size);
+        }
+
+        public static bool IsCurrentState(this Animator animator, int layerIndex, string name)
+        {
+            return animator.GetCurrentAnimatorStateInfo(layerIndex).IsName(name);
+        }
+
+        public static bool IsCurrentState(this Animator animator, string name)
+        {
+            return animator.IsCurrentState(0, name);
         }
     }
 }
