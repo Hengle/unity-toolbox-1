@@ -1,3 +1,6 @@
+## Easing Functions
+https://gist.github.com/cjddmut/d789b9eb78216998e95c
+
 ## Tilemap
 More complicated brushes and tiles (like anmiated tiles and prefab brush) are
 found here:
