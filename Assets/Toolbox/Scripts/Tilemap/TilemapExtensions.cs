@@ -74,6 +74,21 @@ namespace Toolbox
             return Utils.GetComponentAtPosition2D<T>(worldPos);
         }
 
+        /// <summary>
+        /// Gets the component at the given cell if the cell is set with a tile.
+        /// </summary>
+        public static T GetComponentAtSetCell<T>(this Tilemap tilemap, Vector3Int position)
+        {
+            T result = default(T);
+
+            if (!tilemap.IsCellEmpty(position))
+            {
+                result = tilemap.GetComponentAtCell<T>(position);
+            }
+
+            return result;
+        }
+
         public static void DebugDraw(this Tilemap tilemap, float size, Color color = default(Color), float duration = 0.0f, bool depthTest = true)
         {
             BoundsInt bounds = tilemap.cellBounds;
