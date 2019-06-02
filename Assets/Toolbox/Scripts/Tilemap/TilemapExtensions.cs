@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -44,6 +45,32 @@ namespace Toolbox
         {
             Vector3Int pos = tilemap.WorldToCell(position);
             return tilemap.IsInBounds(pos) && tilemap.GetTile(pos) == null;
+        }
+
+        public static List<Vector3Int> GetEmptyCells(this Tilemap tilemap)
+        {
+            List<Vector3Int> open = new List<Vector3Int>();
+
+            for (int i = 0; i < tilemap.size.x; i++)
+            {
+                for (int j = 0; j < tilemap.size.y; j++)
+                {
+                    Vector3Int pos = new Vector3Int(i, j, 0);
+
+                    if (tilemap.IsCellEmpty(pos))
+                    {
+                        open.Add(pos);
+                    }
+                }
+            }
+
+            return open;
+        }
+
+        public static List<Vector3> GetEmptyCellsCenterWorld(this Tilemap tilemap)
+        {
+            List<Vector3Int> open = tilemap.GetEmptyCells();
+            return open.Select(v => tilemap.GetCellCenterWorld(v)).ToList();
         }
 
         public static List<Vector3> GetCellCenterWorld(this Tilemap tilemap, List<Vector3Int> path)
