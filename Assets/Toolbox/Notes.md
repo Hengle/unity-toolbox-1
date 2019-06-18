@@ -1,6 +1,14 @@
 ## Easing Functions
 https://gist.github.com/cjddmut/d789b9eb78216998e95c
 
+DOTween
+http://dotween.demigiant.com/getstarted.php
+
+Set default Ease to InOutSine
+  Tools > Dominant > DOTween Utility Panel
+  Preferences Tab
+  Ease: In Out Sine
+
 ## Tilemap
 More complicated brushes and tiles (like anmiated tiles and prefab brush) are
 found here:
@@ -9,15 +17,6 @@ https://github.com/Unity-Technologies/2d-extras
 For some tiles and brushes (for example animated tiles and prefab brushes)
 you need to create new assets (right click create in project window) and
 configure the tile or brush before you can use it in the tilemap.
-
-## Legacy 3D Lighting Instructions
-  Use Legacy Diffuse for most 3D materials.
-  Have a scene lighting of ambient color and make it #D9D9D9 (which is white #FFFFFF at %85 intensity)
-  Have an all white #FFFFFF directional light with effectively %15 intensity on the ground.
-  To figure out the directional light intensity use the following:
-    cos(angle) * intensity = 0.15
-    intensity = 0.15 / cos(angle)
-  Where angle is the the angle between light direction and Down direction
 
 ## Post Processing
 `Window` > `Package Manager`
