@@ -2,6 +2,7 @@
 
 namespace Toolbox
 {
+    /* TODO Convert to use Forces instead of Velocity like TopDownPlayer3D */
     public class ThirdPersonPlayer : MonoBehaviour
     {
         public float speed = 5f;

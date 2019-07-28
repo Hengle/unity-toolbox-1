@@ -1,5 +1,4 @@
-﻿using Toolbox;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Toolbox
 {

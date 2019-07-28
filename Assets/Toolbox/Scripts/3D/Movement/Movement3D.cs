@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Toolbox
 {
-    [RequireComponent(typeof(Rigidbody2D))]
-    public class Movement2D : MonoBehaviour
+    [RequireComponent(typeof(Rigidbody))]
+    public class Movement3D : MonoBehaviour
     {
         public float accel = 35f;
         public float stoppingDrag = 25f;
@@ -20,14 +20,14 @@ namespace Toolbox
         /// it applied for all future FixedUpdates if you set it once.
         /// </remarks>
         [System.NonSerialized]
-        public Steering2D steering = Steering2D.Stop;
+        public Steering3D steering = Steering3D.Stop;
 
-        Rigidbody2D rb;
-        List<ForceTime2D> knockbacks = new List<ForceTime2D>();
+        Rigidbody rb;
+        List<ForceTime3D> knockbacks = new List<ForceTime3D>();
 
         void Start()
         {
-            rb = GetComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody>();
         }
 
         void FixedUpdate()
@@ -46,7 +46,7 @@ namespace Toolbox
                  * those forces and not the character movement force. */
                 if (knockbacks.Count > 0)
                 {
-                    foreach (ForceTime2D ft in knockbacks)
+                    foreach (ForceTime3D ft in knockbacks)
                     {
                         rb.AddForce(ft.force);
                     }
@@ -63,19 +63,19 @@ namespace Toolbox
             }
         }
 
-        public void AddKnockback(Vector2 force, float duration)
+        public void AddKnockback(Vector3 force, float duration)
         {
-            ForceTime2D ft = new ForceTime2D(force, Time.fixedTime + duration);
+            ForceTime3D ft = new ForceTime3D(force, Time.fixedTime + duration);
             knockbacks.Add(ft);
         }
     }
 
-    struct ForceTime2D
+    struct ForceTime3D
     {
-        public Vector2 force;
+        public Vector3 force;
         public float endTime;
 
-        public ForceTime2D(Vector2 force, float endTime)
+        public ForceTime3D(Vector3 force, float endTime)
         {
             this.force = force;
             this.endTime = endTime;
