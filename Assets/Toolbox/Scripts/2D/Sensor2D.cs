@@ -27,10 +27,15 @@ namespace Toolbox
         {
             T t = other.GetComponent<T>();
 
-            if (t != null && !targets.Contains(t))
+            if (t != null && IsValidTarget(t) && !targets.Contains(t))
             {
                 targets.Add(t);
             }
+        }
+
+        public virtual bool IsValidTarget(T target)
+        {
+            return true;
         }
 
         public virtual void OnTriggerExit2D(Collider2D other)
