@@ -165,6 +165,22 @@ namespace Toolbox
         }
 
         /// <summary>
+        /// Casts a sphere with queriesHitBackfaces set to false for just
+        /// the sphere cast without affecting the project setting.
+        /// </summary>
+        public static RaycastHit[] SphereCastAll(Vector3 origin, float radius, Vector3 direction, float distance, int layerMask)
+        {
+            bool origQueriesHitBackfaces = Physics.queriesHitBackfaces;
+            Physics.queriesHitBackfaces = false;
+
+            RaycastHit[] hits = Physics.SphereCastAll(origin, radius, direction, distance, layerMask);
+
+            Physics.queriesHitBackfaces = origQueriesHitBackfaces;
+
+            return hits;
+        }
+
+        /// <summary>
         /// Casts a 2D ray with queriesStartInColliders set to false for just
         /// the raycast without affecting the project setting.
         /// </summary>

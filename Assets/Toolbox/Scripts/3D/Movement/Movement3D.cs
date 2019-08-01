@@ -10,6 +10,7 @@ namespace Toolbox
         public float stoppingDrag = 25f;
         public float movingDrag;
         public float maxSpeed = 4f;
+        public bool movesOnGround;
 
         /// <summary>
         /// The steering force that the game object should move each FixedUpdate.
@@ -57,9 +58,31 @@ namespace Toolbox
                 }
             }
 
-            if (knockbacks.Count == 0 && rb.velocity.magnitude > maxSpeed)
+            if (knockbacks.Count == 0)
             {
-                rb.velocity = rb.velocity.normalized * maxSpeed;
+                LimitSpeed();
+            }
+        }
+
+        void LimitSpeed()
+        {
+            Vector3 velocity = rb.velocity;
+
+            if (movesOnGround)
+            {
+                velocity.y = 0;
+            }
+
+            if (velocity.magnitude > maxSpeed)
+            {
+                velocity = velocity.normalized * maxSpeed;
+
+                if (movesOnGround)
+                {
+                    velocity.y = rb.velocity.y;
+                }
+
+                rb.velocity = velocity;
             }
         }
 
