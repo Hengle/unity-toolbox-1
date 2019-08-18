@@ -7,7 +7,7 @@ namespace Toolbox
     public class Movement3D : MonoBehaviour
     {
         public float accel = 35f;
-        public float stoppingDrag = 25f;
+        public float stoppingDrag = 50f;
         public float movingDrag;
         public float maxSpeed = 4f;
         public bool movesOnGround;
