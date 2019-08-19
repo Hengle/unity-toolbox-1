@@ -5,11 +5,12 @@ namespace Toolbox
     public class CameraFollow : MonoBehaviour
     {
         public Transform target;
+        [Tooltip("Percent of the way to the target it should follow."), Range(0.001f, 1f)]
         public float followPercent = 0.1f;
+        [Tooltip("Time it takes to follow the target the follow percent."), Range(0.001f, 1f)]
+        public float followLerpTime = 1f / 60f;
         public bool autoOffset = true;
         public Vector3 offset;
-
-        const float ExpectedFPS = 60f;
 
         public virtual void Start()
         {
@@ -35,7 +36,8 @@ namespace Toolbox
             if (target != null)
             {
                 Vector3 desiredPos = target.position + offset;
-                pos += (desiredPos - pos) * followPercent * (Time.deltaTime * ExpectedFPS);
+                float t = 1f - Mathf.Exp((Mathf.Log(1f - followPercent) / followLerpTime) * Time.deltaTime);
+                pos += (desiredPos - pos) * t;
             }
 
             return pos;
