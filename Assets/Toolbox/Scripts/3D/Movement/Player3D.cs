@@ -34,7 +34,7 @@ namespace Toolbox
         {
             if (playerCamera == null)
             {
-                playerCamera = GetComponentInChildren<Camera>().transform;
+                playerCamera = Camera.main.transform;
             }
 
             capsule = GetComponent<CapsuleCollider>();
@@ -56,7 +56,7 @@ namespace Toolbox
             }
         }
 
-        int numUpdatesSinceJump = int.MaxValue;
+        int numUpdatesSinceJump;
 
         void FixedUpdate()
         {
