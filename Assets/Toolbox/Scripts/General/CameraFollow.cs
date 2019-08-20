@@ -7,7 +7,7 @@ namespace Toolbox
         public Transform target;
         [Tooltip("Percent of the way to the target it should follow."), Range(0.001f, 1f)]
         public float followPercent = 0.1f;
-        [Tooltip("Time it takes to follow the target the follow percent."), Range(0.001f, 1f)]
+        [Tooltip("Time it takes to interpolate follow percent of the way to the target."), Range(0.001f, 1f)]
         public float followLerpTime = 1f / 60f;
         public bool autoOffset = true;
         public Vector3 offset;

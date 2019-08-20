@@ -1,13 +1,15 @@
-﻿using Toolbox;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Toolbox
 {
     /* Be sure to set gravity to be faster than real gravity (something like -30f)
-     * in the Physics settings. */
+     * in the Physics settings.
+     * 
+     * Make sure the capsule collider has enough height that it isn't a circle or
+     * ground check will overlap with the ground and it could ignore the ground. */
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Movement3D))]
-    public class FirstPersonPlayer : MonoBehaviour
+    public class Player3D : MonoBehaviour
     {
         public string horAxisName = "Horizontal";
         public string vertAxisName = "Vertical";
@@ -54,6 +56,8 @@ namespace Toolbox
             }
         }
 
+        int numUpdatesSinceJump = int.MaxValue;
+
         void FixedUpdate()
         {
             float distToGround = GetDistToGround();
@@ -67,13 +71,18 @@ namespace Toolbox
             if (distToGround <= (touchingGroundDist + groundCheckDist) && shouldJump)
             {
                 accel.y = jumpAccel;
+                numUpdatesSinceJump = 0;
             }
 
             movement.steering.force = rb.mass * accel;
 
-            movement.steering.isMoving = dir != Vector3.zero || distToGround > touchingGroundDist || accel.y > 0f;
+            /* Depending on the order of execution of the Player3D and Movement3D scripts
+             * there could be two updates after jumping before the character moves so make
+             * sure they don't feel drag until they are in the air. */
+            movement.steering.isMoving = dir != Vector3.zero || distToGround > touchingGroundDist || numUpdatesSinceJump < 2;
 
             shouldJump = false;
+            numUpdatesSinceJump++;
         }
 
         float GetDistToGround()
@@ -89,7 +98,7 @@ namespace Toolbox
             {
                 /* For colliders that overlap the sphere at the start of the sweep the hit
                  * distance is 0, but the ground will never overlap the sphere at the center
-                 * of the capsule. */
+                 * of the capsule (unless the capsule is circle shaped). */
                 if (hit.distance > 0 && hit.distance < distToGround)
                 {
                     distToGround = hit.distance;
