@@ -2,7 +2,6 @@
 
 namespace Toolbox
 {
-    //TODO Make start camera direction not fixed
     //TODO Turn character model if given one
     //TODO Start raycasting from the target + offset to the desired camera position and move the camera closer if it hits anything
     //TODO add zoom in / out for camera
@@ -27,6 +26,20 @@ namespace Toolbox
         float currentY;
         float targetX;
         float targetY;
+
+        /// <summary>
+        /// Rotates the camera around the target
+        /// </summary>
+        public void Rotate(float x, float y)
+        {
+            currentX = x;
+            targetX = x;
+
+            y = Mathf.Clamp(y, minY, maxY);
+
+            currentY = y;
+            targetY = y;
+        }
 
         void Update()
         {
@@ -63,8 +76,8 @@ namespace Toolbox
                 currentX = Mathf.Lerp(currentX, targetX, t);
                 currentY = Mathf.Lerp(currentY, targetY, t);
 
-                Vector3 dir = new Vector3(0, 0, -distance);
                 Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+                Vector3 dir = Vector3.back * distance;
                 transform.position = target.position + targetOffset + (rotation * dir);
                 transform.LookAt(target.position + targetOffset);
             }

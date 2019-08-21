@@ -559,6 +559,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 5
+  minY: 0
+  maxY: 89.9
   mouseSensitivityCurve:
     serializedVersion: 2
     m_Curve:
@@ -584,8 +586,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   invertY: 0
-  minY: 0
-  maxY: 89.9
   target: {fileID: 1930694356}
   targetOffset: {x: 0, y: 1, z: 0}
 --- !u!4 &1930694356 stripped
