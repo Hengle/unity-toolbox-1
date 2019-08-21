@@ -64,7 +64,7 @@ namespace Toolbox
             {
                 /* Framerate-independent interpolation
                  * Calculate the lerp amount, such that we get 99% of the way to our target in the specified time */
-                float rotationLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / rotationLerpTime) * Time.deltaTime);
+                float rotationLerpPct = 1f - Mathf.Exp(Mathf.Log(1f - 0.99f) * Time.deltaTime / rotationLerpTime);
                 currentX = Mathf.Lerp(currentX, targetX, rotationLerpPct);
                 currentY = Mathf.Lerp(currentY, targetY, rotationLerpPct);
 
