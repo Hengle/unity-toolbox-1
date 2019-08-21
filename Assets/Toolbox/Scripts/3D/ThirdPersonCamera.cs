@@ -15,9 +15,6 @@ namespace Toolbox
         [Tooltip("X = Change in mouse position.\nY = Multiplicative factor for camera rotation.")]
         public AnimationCurve mouseSensitivityCurve = new AnimationCurve(new Keyframe(0f, 0.5f, 0f, 5f), new Keyframe(1f, 2.5f, 0f, 0f));
 
-        [Tooltip("Time it takes to interpolate camera rotation 99% of the way to the target."), Range(0.001f, 1f)]
-        public float rotationLerpTime = 0.01f;
-
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
@@ -62,11 +59,9 @@ namespace Toolbox
         {
             if (target != null)
             {
-                /* Framerate-independent interpolation
-                 * Calculate the lerp amount, such that we get 99% of the way to our target in the specified time */
-                float rotationLerpPct = 1f - Mathf.Exp(Mathf.Log(1f - 0.99f) * Time.deltaTime / rotationLerpTime);
-                currentX = Mathf.Lerp(currentX, targetX, rotationLerpPct);
-                currentY = Mathf.Lerp(currentY, targetY, rotationLerpPct);
+                float t = Utils.GetLerpPercent(0.99f, 0.01f, Time.deltaTime);
+                currentX = Mathf.Lerp(currentX, targetX, t);
+                currentY = Mathf.Lerp(currentY, targetY, t);
 
                 Vector3 dir = new Vector3(0, 0, -distance);
                 Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);

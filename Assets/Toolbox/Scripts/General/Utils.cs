@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Toolbox
 {
@@ -44,6 +42,22 @@ namespace Toolbox
         public static float Sign(float f)
         {
             return IsZero(f) ? 0 : Mathf.Sign(f);
+        }
+
+        /// <summary>
+        /// Calculate a framerate independent precentage (t parameter) for lerp.
+        /// </summary>
+        /// <remarks>
+        /// This function is using Exp() and Log() following an example from Unity,
+        /// but you could also remove those and just multiple the desired percent
+        /// by the time ratio (deltaTime / desiredTime).
+        /// </remarks>
+        /// <param name="percent">Desired percent</param>
+        /// <param name="time">Desired time</param>
+        /// <param name="deltaTime">Actual time that has passed</param>
+        public static float GetLerpPercent(float percent, float time, float deltaTime)
+        {
+            return 1f - Mathf.Exp(Mathf.Log(1f - percent) * deltaTime / time);
         }
 
         /// <summary>

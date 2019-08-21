@@ -8,7 +8,7 @@ namespace Toolbox
         [Tooltip("Percent of the way to the target it should follow."), Range(0.001f, 1f)]
         public float followPercent = 0.1f;
         [Tooltip("Time it takes to interpolate follow percent of the way to the target."), Range(0.001f, 1f)]
-        public float followLerpTime = 1f / 60f;
+        public float followTime = 1f / 60f;
         public bool autoOffset = true;
         public Vector3 offset;
 
@@ -36,7 +36,7 @@ namespace Toolbox
             if (target != null)
             {
                 Vector3 desiredPos = target.position + offset;
-                float t = 1f - Mathf.Exp((Mathf.Log(1f - followPercent) / followLerpTime) * Time.deltaTime);
+                float t = Utils.GetLerpPercent(followPercent, followTime, Time.deltaTime);
                 pos += (desiredPos - pos) * t;
             }
 

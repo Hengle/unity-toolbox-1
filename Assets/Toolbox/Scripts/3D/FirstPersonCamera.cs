@@ -7,10 +7,6 @@ namespace Toolbox
         [Tooltip("X = Change in mouse position.\nY = Multiplicative factor for camera rotation.")]
         public AnimationCurve mouseSensitivityCurve = new AnimationCurve(new Keyframe(0f, 0.5f, 0f, 5f), new Keyframe(1f, 2.5f, 0f, 0f));
 
-
-        [Tooltip("Time it takes to interpolate camera rotation 99% of the way to the target."), Range(0.001f, 1f)]
-        public float rotationLerpTime = 0.01f;
-
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
@@ -47,10 +43,8 @@ namespace Toolbox
                 m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
             }
 
-            /* Framerate-independent interpolation
-             * Calculate the lerp amount, such that we get 99% of the way to our target in the specified time */
-            float rotationLerpPct = 1f - Mathf.Exp((Mathf.Log(1f - 0.99f) / rotationLerpTime) * Time.deltaTime);
-            m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, rotationLerpPct);
+            float t = Utils.GetLerpPercent(0.99f, 0.01f, Time.deltaTime);
+            m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, t);
 
             m_InterpolatingCameraState.UpdateTransform(transform);
         }
@@ -68,11 +62,11 @@ namespace Toolbox
                 roll = t.eulerAngles.z;
             }
 
-            public void LerpTowards(CameraState target, float rotationLerpPct)
+            public void LerpTowards(CameraState target, float t)
             {
-                yaw = Mathf.Lerp(yaw, target.yaw, rotationLerpPct);
-                pitch = Mathf.Lerp(pitch, target.pitch, rotationLerpPct);
-                roll = Mathf.Lerp(roll, target.roll, rotationLerpPct);
+                yaw = Mathf.Lerp(yaw, target.yaw, t);
+                pitch = Mathf.Lerp(pitch, target.pitch, t);
+                roll = Mathf.Lerp(roll, target.roll, t);
             }
 
             public void UpdateTransform(Transform t)

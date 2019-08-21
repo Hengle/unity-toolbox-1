@@ -196,7 +196,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6770880174825384464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61cc3f1968e1f468c8d190bc0e048fde, type: 3}
+  m_Script: {fileID: 11500000, guid: 4fba04defd83348c1ae2503c0bed1ded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivityCurve:
