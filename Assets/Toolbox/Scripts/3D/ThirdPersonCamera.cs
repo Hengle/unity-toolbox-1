@@ -16,16 +16,19 @@ namespace Toolbox
         float currentX;
         float currentY;
 
-        public static CursorLockMode cursorMode;
-
-        void Start()
-        {
-            cursorMode = CursorLockMode.Locked;
-        }
-
         void Update()
         {
-            UpdateCursor();
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
 
             if (Cursor.lockState == CursorLockMode.Locked)
             {
@@ -34,26 +37,6 @@ namespace Toolbox
 
                 currentY = Mathf.Clamp(currentY, minY, maxY);
             }
-        }
-
-        void UpdateCursor()
-        {
-            /* Release cursor on escape keypress */
-            if (target == null || Input.GetKeyDown(KeyCode.Escape))
-            {
-                cursorMode = CursorLockMode.None;
-            }
-
-            /* Lock cursor on click */
-            if (target != null && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)))
-            {
-                cursorMode = CursorLockMode.Locked;
-            }
-
-            /* Apply requested cursor state */
-            Cursor.lockState = cursorMode;
-            /* Hide cursor when locking */
-            Cursor.visible = (CursorLockMode.Locked != cursorMode);
         }
 
         void LateUpdate()
