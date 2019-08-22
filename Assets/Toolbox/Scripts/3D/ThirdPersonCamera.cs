@@ -17,9 +17,16 @@ namespace Toolbox
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
 
-        //TODO autoset? maybe just log error message?
         public Transform target;
-        //TODO better name?
+
+        /// <summary>
+        /// Target Offset is added to the the target position for the final
+        /// position the camera follows.
+        /// </summary>
+        /// <remarks>
+        /// This is not the camera's offset from the target, that is determined
+        /// by the the distance and rotation around the target.
+        /// </remarks>
         public Vector3 targetOffset = new Vector3(0f, 1f, 0f);
 
         float currentX;
@@ -27,18 +34,12 @@ namespace Toolbox
         float targetX;
         float targetY;
 
-        /// <summary>
-        /// Rotates the camera around the target
-        /// </summary>
-        public void Rotate(float x, float y)
+        void Start()
         {
-            currentX = x;
-            targetX = x;
-
-            y = Mathf.Clamp(y, minY, maxY);
-
-            currentY = y;
-            targetY = y;
+            if (target == null)
+            {
+                Debug.Log("ThirdPersonCamera has no target.");
+            }
         }
 
         void Update()
@@ -81,6 +82,17 @@ namespace Toolbox
                 transform.position = target.position + targetOffset + (rotation * dir);
                 transform.LookAt(target.position + targetOffset);
             }
+        }
+
+        public void SetRotationAroundTarget(float x, float y)
+        {
+            currentX = x;
+            targetX = x;
+
+            y = Mathf.Clamp(y, minY, maxY);
+
+            currentY = y;
+            targetY = y;
         }
     }
 }
