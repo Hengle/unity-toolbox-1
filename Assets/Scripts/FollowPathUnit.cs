@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using Toolbox;
-using UnityEngine.Tilemaps;
-using System.Collections.Generic;
 
 public class FollowPathUnit : MonoBehaviour
 {
