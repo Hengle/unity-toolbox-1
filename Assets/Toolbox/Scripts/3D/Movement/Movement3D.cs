@@ -12,6 +12,18 @@ namespace Toolbox
         public float maxSpeed = 4f;
         public bool movesOnGround;
 
+        [Header("Look Direction")]
+
+        public float turnSpeed = 20f;
+
+        /// <summary>
+        /// Smoothing controls if the character's look direction should be an
+        /// average of its previous directions (to smooth out momentary changes
+        /// in directions)
+        /// </summary>
+        public bool smoothing = true;
+        public int numSamplesForSmoothing = 5;
+
         /// <summary>
         /// The steering force that the game object should move each FixedUpdate.
         /// </summary>
@@ -24,6 +36,7 @@ namespace Toolbox
         public Steering3D steering = Steering3D.Stop;
 
         Rigidbody rb;
+        Queue<Vector3> velocitySamples = new Queue<Vector3>();
         List<ForceTime3D> knockbacks = new List<ForceTime3D>();
 
         void Start()
@@ -84,6 +97,63 @@ namespace Toolbox
 
                 rb.velocity = velocity;
             }
+        }
+
+        public void LookWhereYouAreGoing(Transform model)
+        {
+            Vector3 direction = rb.velocity;
+            LookAtDirectionWithSmoothing(model, direction);
+        }
+
+        public void LookAtDirectionWithSmoothing(Transform model, Vector3 direction)
+        {
+            if (smoothing)
+            {
+                if (velocitySamples.Count == numSamplesForSmoothing)
+                {
+                    velocitySamples.Dequeue();
+                }
+
+                velocitySamples.Enqueue(rb.velocity);
+
+                direction = Vector3.zero;
+
+                foreach (Vector3 v in velocitySamples)
+                {
+                    direction += v;
+                }
+
+                direction /= velocitySamples.Count;
+            }
+
+            LookAtDirection(model, direction);
+        }
+
+        public void LookAtDirection(Transform model, Vector3 direction)
+        {
+            direction.Normalize();
+
+            /* If we have a non-zero direction then look towards that direciton otherwise do nothing */
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                /* Mulitply by -1 because counter clockwise on the y-axis is in the negative direction */
+                float toRotation = -1 * (Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg);
+                float rotation = Mathf.LerpAngle(model.rotation.eulerAngles.y, toRotation, Time.deltaTime * turnSpeed);
+
+                model.rotation = Quaternion.Euler(0, rotation, 0);
+            }
+        }
+
+        public void LookAtDirection(Transform model, Quaternion toRotation)
+        {
+            LookAtDirection(model, toRotation.eulerAngles.y);
+        }
+
+        public void LookAtDirection(Transform model, float toRotation)
+        {
+            float rotation = Mathf.LerpAngle(model.rotation.eulerAngles.y, toRotation, Time.deltaTime * turnSpeed);
+
+            model.rotation = Quaternion.Euler(0, rotation, 0);
         }
 
         public void AddKnockback(Vector3 force, float duration)
