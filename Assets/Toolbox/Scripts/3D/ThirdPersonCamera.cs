@@ -34,12 +34,16 @@ namespace Toolbox
         float targetX;
         float targetY;
 
+        int skipFrames = 3;
+
         void Start()
         {
             if (target == null)
             {
                 Debug.Log("ThirdPersonCamera has no target.");
             }
+
+            HideCursor();
         }
 
         void Update()
@@ -52,21 +56,34 @@ namespace Toolbox
 
             if (Input.GetMouseButtonDown(0))
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                HideCursor();
             }
 
             if (Cursor.lockState == CursorLockMode.Locked)
             {
                 Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
 
-                float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
+                if (skipFrames > 0 && mouseMovement.magnitude > 0)
+                {
+                    skipFrames--;
+                }
+                else
+                {
+                    float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
 
-                targetX += mouseMovement.x * mouseSensitivityFactor;
-                targetY += mouseMovement.y * mouseSensitivityFactor;
+                    targetX += mouseMovement.x * mouseSensitivityFactor;
+                    targetY += mouseMovement.y * mouseSensitivityFactor;
 
-                targetY = Mathf.Clamp(targetY, minY, maxY);
+                    targetY = Mathf.Clamp(targetY, minY, maxY);
+                }
             }
+        }
+
+        public void HideCursor()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            skipFrames = 3;
         }
 
         void LateUpdate()

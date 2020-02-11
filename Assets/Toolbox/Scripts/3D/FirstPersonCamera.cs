@@ -13,10 +13,14 @@ namespace Toolbox
         CameraState m_TargetCameraState = new CameraState();
         CameraState m_InterpolatingCameraState = new CameraState();
 
+        int skipFrames = 3;
+
         void OnEnable()
         {
             m_TargetCameraState.SetFromTransform(transform);
             m_InterpolatingCameraState.SetFromTransform(transform);
+
+            HideCursor();
         }
 
         void Update()
@@ -29,24 +33,37 @@ namespace Toolbox
 
             if (Input.GetMouseButtonDown(0))
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                HideCursor();
             }
 
             if (Cursor.lockState == CursorLockMode.Locked)
             {
                 Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
 
-                float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
+                if (skipFrames > 0 && mouseMovement.magnitude > 0)
+                {
+                    skipFrames--;
+                }
+                else
+                {
+                    float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
 
-                m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
-                m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
+                    m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
+                    m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
+                }
             }
 
             float t = Utils.GetLerpPercent(0.99f, 0.01f, Time.deltaTime);
             m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, t);
 
             m_InterpolatingCameraState.UpdateTransform(transform);
+        }
+
+        public void HideCursor()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            skipFrames = 3;
         }
 
         class CameraState
