@@ -23,7 +23,7 @@ namespace Toolbox
             HideCursor();
         }
 
-        void Update()
+        void LateUpdate()
         {
             if (Input.GetKey(KeyCode.Escape))
             {
